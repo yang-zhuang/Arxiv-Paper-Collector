@@ -1,0 +1,6 @@
+requests
+feedparser
+tqdm
+arxiv
+dateutil
+python-dateutil
