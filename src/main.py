@@ -9,10 +9,11 @@ def parse_date_range(s):
     """解析日期范围字符串，返回 (start_date, end_date) 元组。
 
     支持格式:
-      '2025'           → ('20250101', '20251231')
+      '2025'           → ('20250101', '{当前年}1231')
       '2025-2026'      → ('20250101', '20261231')
-      '2025-03'        → ('20250301', '20250331')
+      '2025-03'        → ('20250301', '{当前年}{当前月}最后一天')
       '2025-03-2025-06'→ ('20250301', '20250630')
+    仅提供开始时间时，结束时间默认为当前年月。
     """
     s = s.strip()
     pattern = r'^(\d{4})(?:-(\d{2}))?\s*(?:-\s*(\d{4})(?:-(\d{2}))?)?$'
@@ -23,20 +24,20 @@ def parse_date_range(s):
         )
 
     from calendar import monthrange
+    from datetime import date
 
+    now = date.today()
     g1, g2, g3, g4 = match.group(1), match.group(2), match.group(3), match.group(4)
 
     if g3 is None:
-        # 单个年份或年月: '2025' 或 '2025-03'
+        # 单个年份或年月: '2025' 或 '2025-03'，结束时间默认为当前年月
         year = int(g1)
         if g2:
-            month = int(g2)
-            _, last_day = monthrange(year, month)
-            start = f"{year}{month:02d}01"
-            end = f"{year}{month:02d}{last_day}"
+            start = f"{year}{int(g2):02d}01"
         else:
             start = f"{year}0101"
-            end = f"{year}1231"
+        _, last_day = monthrange(now.year, now.month)
+        end = f"{now.year}{now.month:02d}{last_day}"
     else:
         # 范围: '2024-2025' 或 '2025-03-2025-06'
         start_year = int(g1)
@@ -54,7 +55,7 @@ def parse_date_range(s):
         _, last_day = monthrange(end_year, end_month)
         end = f"{end_year}{end_month:02d}{last_day}"
 
-    return (start, end)
+    return start, end
 
 
 def _format_range(start, end):
@@ -79,11 +80,11 @@ def main():
     p_dl = sub.add_parser("download", help="下载论文 PDF 和元数据")
     p_dl.add_argument("--categories", type=str, default="cs.AI",
                       help="arXiv类别，逗号分隔 (如 cs.AI,cs.CV，默认: cs.AI)")
-    p_dl.add_argument("--date", type=parse_date_range, default=parse_date_range('2026-02'),
+    p_dl.add_argument("--date", type=parse_date_range, default=parse_date_range('2025-11-2026-04'),
                       help="日期范围: 2025 / 2024-2025 / 2025-03 / 2025-03-2025-06。默认: 2025")
     p_dl.add_argument("--output", default="D:/papers/arxiv", help="输出目录 (默认: papers)")
-    p_dl.add_argument("--max", type=int, default=100, help="最大下载数量 (默认: 2000)")
-    p_dl.add_argument("--keywords", type=str, default="skill", help="关键词，逗号分隔")
+    p_dl.add_argument("--max", type=int, default=3, help="最大下载数量 (默认: 2000)")
+    p_dl.add_argument("--keywords", type=str, default="Nested Learning (NL)", help="关键词，逗号分隔")
     p_dl.add_argument("--authors", type=str, help="作者，逗号分隔")
     p_dl.add_argument("--days", type=int, help="最近N天的论文")
     p_dl.add_argument("--uri", default="mongodb://localhost:27017",
@@ -199,3 +200,7 @@ def _handle_list(categories, start_date, end_date, args):
         total += len(papers)
 
     print(f"\n总计: {total} 篇论文")
+
+
+if __name__ == '__main__':
+    main()
