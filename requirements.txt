@@ -3,3 +3,4 @@ feedparser>=6.0.0
 tqdm>=4.64.0
 python-dateutil>=2.8.0
 pymongo>=4.6.0
+pyyaml>=6.0

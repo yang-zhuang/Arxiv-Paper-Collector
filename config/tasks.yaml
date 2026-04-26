@@ -1,0 +1,33 @@
+# 批量下载任务配置
+# 所有参数均可选，缺失值从 defaults 或 CLI 默认值中取
+
+defaults:
+  categories: "cs.AI"
+  date: "2025"
+  output: "D:/papers/arxiv"
+  max: 10
+  uri: "mongodb://localhost:27017"
+
+tasks:
+  - name: "NL papers in cs.AI"
+    keywords: "Nested Learning (NL)"
+
+  - name: "Transformer papers in NLP"
+    categories: "cs.CL"
+    keywords: "transformer,attention"
+    max: 20
+
+  - name: "Vision papers 2025-03~06"
+    categories: "cs.CV"
+    date: "2025-03-2025-06"
+    keywords: "object detection"
+
+  - name: "Recent RL papers (last 30 days)"
+    categories: "cs.LG"
+    days: 30
+    keywords: "reinforcement learning"
+
+  - name: "Author-specific search"
+    categories: "cs.AI,cs.LG"
+    authors: "Yoshua Bengio"
+    max: 5

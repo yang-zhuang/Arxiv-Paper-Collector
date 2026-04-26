@@ -15,10 +15,11 @@ setup(
         "tqdm>=4.64.0",
         "python-dateutil>=2.8.0",
         "pymongo>=4.6.0",
+        "pyyaml>=6.0",
     ],
     entry_points={
         "console_scripts": [
-            "arxiv-collector=src.cli:main",
+            "arxiv-collector=src.main:main",
         ],
     },
 )
