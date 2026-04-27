@@ -7,7 +7,6 @@ import random
 import warnings
 from collections import deque
 from datetime import datetime, timedelta
-from urllib.parse import quote
 
 import requests
 import feedparser
@@ -51,12 +50,12 @@ def _build_query(category, start_date, end_date, days=None, keywords=None, autho
     if keywords:
         if isinstance(keywords, str):
             keywords = [keywords]
-        kw_parts = [f"(ti:{quote(k)} OR abs:{quote(k)})" for k in keywords]
+        kw_parts = [f"(ti:{k} OR abs:{k})" for k in keywords]
         parts.append(f"({' AND '.join(kw_parts)})" if len(kw_parts) > 1 else kw_parts[0])
     if authors:
         if isinstance(authors, str):
             authors = [authors]
-        parts.append(f"({' AND '.join(f'au:{quote(a)}' for a in authors)})")
+        parts.append(f"({' AND '.join(f'au:{a}' for a in authors)})")
     return " AND ".join(f"({p})" for p in parts)
 
 
