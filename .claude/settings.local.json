@@ -22,7 +22,9 @@
       "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --max 1 --merge)",
       "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --subgroup \"Show Results Enabled\" --max 99 --categories cs.LG)",
       "Bash(git checkout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)"
     ]
   }
 }
