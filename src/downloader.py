@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 from src.api_client import APIRateLimiter
 
-_rate_limiter = APIRateLimiter(base_delay=3)
+_rate_limiter = APIRateLimiter()
 
 
 def download_pdf(paper: dict, pdf_path: str) -> bool:
