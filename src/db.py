@@ -109,8 +109,8 @@ def get_stats(db, category: str = None, source: str = "arxiv") -> dict:
 
 
 def get_existing_papers(db, category: str, start_year: int, end_year: int,
-                        source: str = "arxiv", status: str = "completed") -> set[str]:
-    """获取指定类别和年份范围内的论文URL集合"""
+                        source: str = "arxiv", status: str = "completed") -> dict[str, str]:
+    """获取指定类别和年份范围内的论文，返回 {pdf_url: title}"""
     query = {
         "source": source,
         "category": category,
@@ -118,7 +118,7 @@ def get_existing_papers(db, category: str, start_year: int, end_year: int,
     }
     if status is not None:
         query["status"] = status
-    return {doc["pdf_url"] for doc in db[COLLECTION].find(query, {"pdf_url": 1, "_id": 0})}
+    return {doc["pdf_url"]: doc.get("title", "") for doc in db[COLLECTION].find(query, {"pdf_url": 1, "title": 1, "_id": 0})}
 
 
 def close():

@@ -50,7 +50,7 @@ def _build_query(category, start_date, end_date, days=None, keywords=None, autho
     if keywords:
         if isinstance(keywords, str):
             keywords = [keywords]
-        kw_parts = [f"(ti:{k} OR abs:{k})" for k in keywords]
+        kw_parts = [f'(ti:"{k}" OR abs:"{k}")' if ' ' in k else f"(ti:{k} OR abs:{k})" for k in keywords]
         parts.append(f"({' AND '.join(kw_parts)})" if len(kw_parts) > 1 else kw_parts[0])
     if authors:
         if isinstance(authors, str):
@@ -93,16 +93,15 @@ def fetch_papers(category, start_date, end_date, max_papers=None,
     query = _build_query(category, start_date, end_date, days, keywords, authors)
     print(f"  搜索: {query}")
 
-    completed_urls = set()
+    completed_urls = {}
     if db is not None:
         from src.db import get_existing_papers
         completed_urls = get_existing_papers(db, category,
                                              start_year=int(start_date[:4]),
                                              end_year=int(end_date[:4]))
-        if completed_urls:
-            print(f"  跳过 {len(completed_urls)} 篇已完成论文")
 
     all_papers = []
+    skipped_papers = []
     start_index = 0
     remaining = max_papers or 999999
 
@@ -143,11 +142,20 @@ def fetch_papers(category, start_date, end_date, max_papers=None,
             if max_papers is not None and len(all_papers) >= max_papers:
                 return all_papers
             paper = _parse_entry(entry, category)
-            if paper["pdf_url"] and paper["pdf_url"] not in completed_urls:
-                all_papers.append(paper)
+            if not paper["pdf_url"]:
+                continue
+            if paper["pdf_url"] in completed_urls:
+                skipped_papers.append(paper)
+                continue
+            all_papers.append(paper)
 
         start_index += len(feed.entries)
         if len(feed.entries) < batch_size:
             break
+
+    if skipped_papers:
+        print(f"  跳过 {len(skipped_papers)} 篇已下载论文:")
+        for p in skipped_papers:
+            print(f"    - {p['title']}")
 
     return all_papers
