@@ -4,16 +4,44 @@ import re
 import html
 import time
 import random
+import warnings
 from collections import deque
 from datetime import datetime, timedelta
 from urllib.parse import quote
+from urllib3.util.ssl_ import create_urllib3_context
+from urllib3.exceptions import InsecureRequestWarning
 
 import requests
 import feedparser
 from tqdm import tqdm
 from dateutil import parser as date_parser
 
+# 禁用 SSL 警告（因为我们需要禁用 SSL 验证来连接 arXiv API）
+warnings.filterwarnings('ignore', category=InsecureRequestWarning)
+
 BASE_URL = "http://export.arxiv.org/api/query"
+
+# 创建兼容的 SSL 上下文，解决 Windows 上的 SSL 错误
+_ssl_context = create_urllib3_context()
+_ssl_context.options &= 0x4  # 禁用 OP_LEGACY_SERVER_CONNECT
+try:
+    # 尝试使用更宽松的 SSL 设置
+    import ssl
+    _ssl_context.minimum_version = ssl.TLSVersion.TLSv1_2
+    _ssl_context.maximum_version = ssl.TLSVersion.TLSv1_3
+    _ssl_context.check_hostname = False
+    _ssl_context.verify_mode = ssl.CERT_NONE
+except Exception:
+    pass  # 如果设置失败，使用默认值
+
+# 创建自定义的 Session
+from requests.adapters import HTTPAdapter
+_session = requests.Session()
+_session.mount('https://', HTTPAdapter(
+    max_retries=3,
+    pool_connections=10,
+    pool_maxsize=10
+))
 
 
 # ── 工具函数 ──────────────────────────────────────────────
@@ -212,10 +240,22 @@ def fetch_papers(
         for attempt in range(3):
             try:
                 _rate_limiter.wait()
-                resp = requests.get(BASE_URL, params=params, timeout=60)
+                resp = _session.get(
+                    BASE_URL,
+                    params=params,
+                    timeout=60,
+                    verify=False  # 跳过 SSL 验证以解决 Windows SSL 错误
+                )
                 resp.raise_for_status()
                 feed = feedparser.parse(resp.content)
                 break
+            except requests.exceptions.SSLError as e:
+                if attempt < 2:
+                    print(f"  SSL 错误 (尝试 {attempt + 1}/3): {e}")
+                    time.sleep(3 + attempt * 2)  # SSL 错误等待更长时间
+                else:
+                    print(f"  请求失败: {e}")
+                    return all_papers
             except Exception as e:
                 if attempt < 2:
                     time.sleep(2 ** attempt)

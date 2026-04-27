@@ -1,0 +1,38 @@
+# 测试 show_results 功能
+
+defaults:
+  categories: "cs.AI"
+  date: "2024"
+  output: "D:/papers/arxiv"
+  max: 3
+  uri: "mongodb://localhost:27017"
+  on_no_results: warn
+  show_results: true
+
+groups:
+  Test Group:
+    Show Results Enabled:
+      - date: 2024-01-2024-12
+        keywords: reinforcement learning
+        max: 3
+        show_results: true
+
+    Show Results Disabled:
+      - date: 2024-01-2024-12
+        keywords: machine learning
+        max: 3
+        show_results: false
+
+    On No Results Warn:
+      - date: 2099-01-2099-12
+        keywords: nonexistent paper title xyz
+        max: 2
+        on_no_results: warn
+        show_results: true
+
+    On No Results Silent:
+      - date: 2099-01-2099-12
+        keywords: another nonexistent paper
+        max: 2
+        on_no_results: silent
+        show_results: true

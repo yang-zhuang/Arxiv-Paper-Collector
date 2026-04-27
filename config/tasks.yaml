@@ -1,33 +1,146 @@
-# 批量下载任务配置
-# 所有参数均可选，缺失值从 defaults 或 CLI 默认值中取
-
 defaults:
-  categories: "cs.AI"
-  date: "2025"
-  output: "D:/papers/arxiv"
+  categories: cs.AI
+  date: '2025'
+  output: D:/papers/arxiv
   max: 10
-  uri: "mongodb://localhost:27017"
-
-tasks:
-  - name: "NL papers in cs.AI"
-    keywords: "Nested Learning (NL)"
-
-  - name: "Transformer papers in NLP"
-    categories: "cs.CL"
-    keywords: "transformer,attention"
-    max: 20
-
-  - name: "Vision papers 2025-03~06"
-    categories: "cs.CV"
-    date: "2025-03-2025-06"
-    keywords: "object detection"
-
-  - name: "Recent RL papers (last 30 days)"
-    categories: "cs.LG"
-    days: 30
-    keywords: "reinforcement learning"
-
-  - name: "Author-specific search"
-    categories: "cs.AI,cs.LG"
-    authors: "Yoshua Bengio"
-    max: 5
+  uri: mongodb://localhost:27017
+  on_no_results: warn  # 可选值: warn, raise, silent
+  show_results: true  # 是否显示搜索到的论文列表
+groups:
+  Policy Optimization:
+    GRPO (Group Relative):
+    - date: 2024-01-2024-03
+      keywords: 'DeepSeekMath Pushing the Limits of Mathematical Reasoning in Open
+        Language Models'
+      max: 2
+    - date: 2025-01-2025-02
+      keywords: 'DeepSeek-R1 Incentivizing Reasoning Capability in LLMs via Reinforcement
+        Learning'
+      max: 2
+    - date: 2025-06-2025-08
+      keywords: Group Sequence Policy Optimization
+      max: 2
+    - date: 2025-02-2025-04
+      keywords: 'DAPO An Open-Source LLM Reinforcement Learning System at Scale'
+      max: 2
+    - date: 2025-03-2025-05
+      keywords: 'INTELLECT-2: A Reasoning Model Trained Through Globally Decentralized
+        Reinforcement Learning'
+      max: 2
+    - date: 2025-05-2025-07
+      keywords: 'Beyond the 80/20 Rule: High-Entropy Minority Tokens Drive Effective
+        Reinforcement Learning for LLM Reasoning'
+      max: 2
+    - date: 2025-02-2025-05
+      keywords: 'Dr. GRPO: Understanding R1-Zero-Like Training: A Critical Perspective'
+      max: 2
+    - date: 2025-07-2025-09
+      keywords: 'Part I: Tricks or Traps? A Deep Dive into RL for LLM Reasoning (Lite
+        PPO)'
+      max: 2
+    - date: 2025-06-2025-09
+      keywords: 'Sample More to Think Less: Group Filtered Policy Optimization for
+        Concise Reasoning'
+      max: 2
+    - date: 2025-09-2025-11
+      keywords: Perception-Aware Policy Optimization for Multimodal Reasoning
+      max: 2
+    - date: 2025-09-2025-11
+      keywords: The Art of Scaling Reinforcement Learning
+      max: 2
+    - date: 2025-09-2025-11
+      keywords: 'It Takes Two: Your GRPO Is Secretly DPO'
+      max: 2
+    - date: 2025-11-2026-01
+      keywords: 'DeepSeek-V3.2: Pushing the Frontier of Open Large Language Models'
+      max: 2
+    DPO (Direct Preference):
+    - date: 2023-04-2023-06
+      keywords: 'Direct Preference Optimization: Your Language Model is Secretly a
+        Reward Model'
+      max: 2
+    - date: 2023-04-2023-06
+      keywords: 'SLiC-HF: Sequence Likelihood Calibration with Human Feedback'
+      max: 2
+    - date: 2023-08-2023-10
+      keywords: Statistical Rejection Sampling Improves Preference Optimization
+      max: 2
+    Triple PO:
+    - date: 2024-04-2024-06
+      keywords: 'Triple Preference Optimization: Achieving Better Alignment using
+        a Single Step Optimization'
+      max: 2
+    Other PO Variants:
+    - date: 2026-02-2026-05
+      keywords: 'FIPO: Eliciting Deep Reasoning with Future-KL Influenced Policy Optimization'
+      max: 2
+    - date: 2025-09-2025-11
+      keywords: Soft Adaptive Policy Optimization
+      max: 2
+    - date: 2025-10-2025-12
+      keywords: Soft Adaptive Policy Optimization
+      max: 2
+    - date: 2025-12-2026-02
+      keywords: 'GDPO: Group reward-Decoupled Normalization Policy Optimization for
+        Multi-reward RL Optimization'
+      max: 2
+    - date: 2025-12-2026-03
+      keywords: 'Length-Unbiased Sequence Policy Optimization: Revealing and Controlling
+        Response Length Variation in RLVR'
+      max: 2
+    - date: 2025-12-2026-03
+      keywords: 'VESPO: Variational Sequence-Level Soft Policy Optimization for Stable
+        Off-Policy LLM Training'
+      max: 2
+    - date: 2025-12-2026-03
+      keywords: Rethinking the Trust Region in LLM Reinforcement Learning
+      max: 2
+  Self-Distillation:
+    On-Policy Distillation:
+    - keywords: Rethinking On-Policy Distillation of Large Language Models
+      max: 2
+    - date: 2023-05-2023-06
+      keywords: 'On-Policy Distillation of Language Models: Learning from Self-Generated
+        Mistakes'
+      max: 2
+    Self-Distillation Code Gen:
+    - date: 2026-03-2026-05
+      keywords: Embarrassingly Simple Self-Distillation Improves Code Generation
+      max: 2
+  Multi-Agent Frameworks:
+    Multi-Agent Research:
+    - keywords: SkillClaw Let Skills Evolve Collectively with Agentic Evolver
+      max: 2
+    - keywords: PaperOrchestra A Multi-Agent Framework for Automated AI Research Paper
+        Writing
+      max: 2
+    OpenResearcher:
+    - date: 2024-07-2024-10
+      keywords: 'OpenResearcher: Unleashing AI for Accelerated Scientific Research'
+      max: 2
+    - date: 2026-01-2026-05
+      keywords: 'OpenResearcher: A Fully Open Pipeline for Long-Horizon Deep Research
+        Trajectory Synthesis'
+      max: 2
+  Reasoning Models:
+    Latent Reasoning:
+    - date: 2025-10-2025-12
+      keywords: Scaling Latent Reasoning via Looped Language Models
+      max: 5
+    Multimodal Reasoning:
+    - date: 2026-02-2026-05
+      keywords: LongCat-Next Lexicalizing Modalities as Discrete Tokens
+      max: 2
+    Agentic Engineering:
+    - date: 2026-01-2026-03
+      keywords: 'GLM-5: from Vibe Coding to Agentic Engineering'
+      max: 2
+  Others:
+  - date: 2024-01-2024-12
+    keywords: reinforcement learning
+    max: 3
+    show_results: true
+    on_no_results: warn
+  - date: 2025-03-2025-06
+    keywords: 'SkillReducer: Optimizing LLM Agent Skills for Token Efficiency'
+    max: 2

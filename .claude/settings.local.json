@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//mnt/g/Code/**)",
+      "Bash(python -m src batch --file config/tasks.yaml --uri mongodb://localhost:27017)",
+      "Bash(python src/main.py batch --file config/tasks.yaml)",
+      "Bash(set PYTHONPATH=%cd%)",
+      "Bash(python -m src.main batch --file config/tasks.yaml)",
+      "Bash(timeout 30 python -m src.main batch --file config/test_show_results.yaml)",
+      "Bash(python -m src.main download --categories cs.AI --date 2024-01 --max 1 --keywords \"test\")",
+      "Bash(python -m src.main download --file config/tasks.yaml --group \"Policy Optimization\" --subgroup \"DPO \\(Direct Preference\\)\" --max 1)",
+      "Bash(python -m src.main download --file config/tasks.yaml --group \"Policy Optimization\" --max 1)",
+      "Bash(python -m src.main download --help)",
+      "Bash(python -m src.main download --group \"Policy Optimization\" --subgroup \"GRPO \\(Group Relative\\)\" --max 1)",
+      "Bash(python -m src.main download --group \"Self-Distillation\" --max 1)",
+      "Bash(python -m src.main download)",
+      "Bash(python -m src.main download --group \"Policy Optimization\" --max 1)",
+      "Bash(python -m src.main download --max 1)",
+      "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test\" --subgroup \"Single\" --max 1)",
+      "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --subgroup \"Show Results Enabled\" --max 1)",
+      "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --max 1)",
+      "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --max 1 --merge)",
+      "Bash(python -m src.main download --file config/test_show_results.yaml --group \"Test Group\" --subgroup \"Show Results Enabled\" --max 99 --categories cs.LG)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
